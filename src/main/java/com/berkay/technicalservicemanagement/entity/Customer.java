@@ -22,15 +22,15 @@ public class Customer {
     private String firstName;
     private String lastName;
     private String email;
-    private String adress;
+    private String address;
     private String phone;
 
 
-    public Customer(String firstName, String lastName, String email, String adress, String phone) {
+    public Customer(String firstName, String lastName, String email, String address, String phone) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.adress = adress;
+        this.address = address;
         this.phone = phone;
     }
 }
