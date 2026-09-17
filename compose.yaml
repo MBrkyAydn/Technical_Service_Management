@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    container_name:  'technical_service-db'
+    environment:
+      - 'POSTGRES_DB=technical_service'
+      - 'POSTGRES_PASSWORD=8442'
+      - 'POSTGRES_USER=postgres'
+    ports:
+      - '5432'
