@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 public class CustomerCreateRequest {
     @NotBlank(message = "Ad Boş Bırakılamaz")
     private String firstName;
