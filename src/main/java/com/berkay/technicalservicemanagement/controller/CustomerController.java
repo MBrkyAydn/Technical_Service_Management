@@ -24,7 +24,8 @@ public class CustomerController {
     public Customer createCustomer(@Valid @RequestBody CustomerCreateRequest request) {
         return customerService.createCustomer(request);
     }
-
+//@Valid, dışarıdan gelen verinin (JSON/DTO) geçerlilik kurallarına (@NotBlank, @NotNull, @Min vb.)
+// uyup uymadığını kontrol eden ve kural ihlali varsa isteği reddedip otomatik hata fırlatan doğrulama bekçisidir.
     @GetMapping("/{id}")
     public Customer findCustomerById(@PathVariable Long id) {
         return customerService.findCustomerById(id);

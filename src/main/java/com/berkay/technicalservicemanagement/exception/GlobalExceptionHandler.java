@@ -11,16 +11,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public String handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
+    public String handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         return ex.getBindingResult()
                 .getFieldErrors()
                 .getFirst().getDefaultMessage();
 
     }
+
     @ExceptionHandler(CustomerNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleCustomerNotFoundException(CustomerNotFoundException ex){
+    public String handleCustomerNotFoundException(CustomerNotFoundException ex) {
         return ex.getMessage();
     }
 
+    @ExceptionHandler(DeviceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleDeviceNotFoundException(DeviceNotFoundException ex) {
+        return ex.getMessage();
+    }
 }
