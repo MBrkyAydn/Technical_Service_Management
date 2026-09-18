@@ -47,5 +47,10 @@ public class DeviceController {
         deviceService.deleteDevice(id);
 
     }
+    @GetMapping("/customer/{customerId}")
+    public List<Device> getDevicesByCustomerId(
+            @PathVariable Long customerId) {
 
+        return deviceService.getDevicesByCustomerId(customerId);
+    }
 }

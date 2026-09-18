@@ -29,4 +29,12 @@ public class GlobalExceptionHandler {
     public String handleDeviceNotFoundException(DeviceNotFoundException ex) {
         return ex.getMessage();
     }
+
+    @ExceptionHandler(TechnicianNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleTechnicianNotFoundException(TechnicianNotFoundException ex) {
+        return ex.getMessage();
+
+    }
+
 }

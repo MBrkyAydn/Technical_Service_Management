@@ -57,6 +57,7 @@ public class DeviceService {
         return deviceRepository.save(device);
 
     }
+
     public void deleteDevice(Long id) {
         Device device = deviceRepository.findById(id)
                 .orElseThrow(() -> new DeviceNotFoundException("Device : " + id));
@@ -64,6 +65,9 @@ public class DeviceService {
 
 
     }
+    public List<Device> getDevicesByCustomerId(Long customerId) {
 
+        return deviceRepository.findByCustomerId(customerId);
+    }
 
 }
