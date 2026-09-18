@@ -35,6 +35,18 @@ public class GlobalExceptionHandler {
     public String handleTechnicianNotFoundException(TechnicianNotFoundException ex) {
         return ex.getMessage();
 
+
     }
 
+    @ExceptionHandler(ServiceRecordNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleServiceRecordNotFoundException(ServiceRecordNotFoundException ex) {
+        return ex.getMessage();
+
+    }
+    @ExceptionHandler(InvalidServiceStatusTransitionException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleInvalidServiceStatusTransitionException(InvalidServiceStatusTransitionException ex) {
+          return   ex.getMessage();
+    }
 }
