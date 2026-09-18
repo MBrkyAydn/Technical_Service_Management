@@ -26,11 +26,10 @@ public class CustomerService {
         Customer customer = new Customer(
                 request.getFirstName(),
                 request.getLastName(),
-                request.getPhone(),
                 request.getEmail(),
-                request.getAddress()
+                request.getAddress(),
+                request.getPhone()
         );
-
         return customerRepository.save(customer);
 
     }
