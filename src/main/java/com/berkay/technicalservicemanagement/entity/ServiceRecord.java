@@ -1,7 +1,6 @@
 package com.berkay.technicalservicemanagement.entity;
 
 
-import com.berkay.technicalservicemanagement.repository.CustomerRepository;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -11,6 +11,7 @@ import com.berkay.technicalservicemanagement.exception.DeviceNotFoundException;
 import com.berkay.technicalservicemanagement.exception.InvalidServiceStatusTransitionException;
 import com.berkay.technicalservicemanagement.exception.ServiceRecordNotFoundException;
 import com.berkay.technicalservicemanagement.exception.TechnicianNotFoundException;
+import com.berkay.technicalservicemanagement.mapper.ServiceRecordMapper;
 import com.berkay.technicalservicemanagement.repository.DeviceRepository;
 import com.berkay.technicalservicemanagement.repository.ServiceRecordRepository;
 import com.berkay.technicalservicemanagement.repository.TechnicianRepository;
@@ -23,11 +24,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ServiceRecordService {
+
     private final DeviceRepository deviceRepository;
     private final TechnicianRepository technicianRepository;
     private final ServiceRecordRepository serviceRecordRepository;
+    private final ServiceRecordMapper serviceRecordMapper;
 
-    public ServiceRecord createServiceRecord(
+    public ServiceRecordResponse createServiceRecord(
             ServiceRecordCreateRequest request) {
 
         Device device = deviceRepository.findById(request.getDeviceId())
@@ -40,67 +43,23 @@ public class ServiceRecordService {
                         new TechnicianNotFoundException(
                                 "Teknisyen bulunamadı : " + request.getTechnicianId()));
 
-        ServiceRecord serviceRecord = new ServiceRecord(
-                device,
-                technician,
-                request.getFaultDescription(),
-                request.getRepairDetails(),
-                request.getPrice(),
-                LocalDateTime.now(),
-                ServiceStatus.BEKLEMEDE);
+        ServiceRecord serviceRecord =
+                serviceRecordMapper.toEntity(request, device, technician);
 
-        return serviceRecordRepository.save(serviceRecord);
+        serviceRecord.setServiceDate(LocalDateTime.now());
+        serviceRecord.setStatus(ServiceStatus.BEKLEMEDE);
+
+        ServiceRecord savedServiceRecord =
+                serviceRecordRepository.save(serviceRecord);
+
+        return serviceRecordMapper.toResponse(savedServiceRecord);
     }
 
     public List<ServiceRecordResponse> getAllServiceRecords() {
 
         return serviceRecordRepository.findAll()
                 .stream()
-                .map(serviceRecord -> {
-
-                    ServiceRecordResponse response = new ServiceRecordResponse();
-
-                    response.setId(serviceRecord.getId());
-
-                    response.setCustomerName(
-                            serviceRecord.getDevice()
-                                    .getCustomer()
-                                    .getFirstName()
-                                    + " " +
-                                    serviceRecord.getDevice()
-                                            .getCustomer()
-                                            .getLastName()
-                    );
-
-                    response.setDevice(
-                            serviceRecord.getDevice().getBrand()
-                                    + " " +
-                                    serviceRecord.getDevice().getModel()
-                    );
-
-                    response.setTechnicianName(
-                            serviceRecord.getTechnician().getFirstName()
-                                    + " " +
-                                    serviceRecord.getTechnician().getLastName()
-                    );
-
-                    response.setFaultDescription(
-                            serviceRecord.getFaultDescription());
-
-                    response.setRepairDetails(
-                            serviceRecord.getRepairDetails());
-
-                    response.setPrice(
-                            serviceRecord.getPrice());
-
-                    response.setServiceDate(
-                            serviceRecord.getServiceDate());
-
-                    response.setStatus(
-                            serviceRecord.getStatus());
-
-                    return response;
-                })
+                .map(serviceRecordMapper::toResponse)
                 .toList();
     }
 
@@ -111,51 +70,10 @@ public class ServiceRecordService {
                         new ServiceRecordNotFoundException(
                                 "Servis kaydı bulunamadı : " + id));
 
-        ServiceRecordResponse response = new ServiceRecordResponse();
-
-        response.setId(serviceRecord.getId());
-
-        response.setCustomerName(
-                serviceRecord.getDevice()
-                        .getCustomer()
-                        .getFirstName()
-                        + " " +
-                        serviceRecord.getDevice()
-                                .getCustomer()
-                                .getLastName()
-        );
-
-        response.setDevice(
-                serviceRecord.getDevice().getBrand()
-                        + " " +
-                        serviceRecord.getDevice().getModel()
-        );
-
-        response.setTechnicianName(
-                serviceRecord.getTechnician().getFirstName()
-                        + " " +
-                        serviceRecord.getTechnician().getLastName()
-        );
-
-        response.setFaultDescription(
-                serviceRecord.getFaultDescription());
-
-        response.setRepairDetails(
-                serviceRecord.getRepairDetails());
-
-        response.setPrice(
-                serviceRecord.getPrice());
-
-        response.setServiceDate(
-                serviceRecord.getServiceDate());
-
-        response.setStatus(
-                serviceRecord.getStatus());
-
-        return response;
+        return serviceRecordMapper.toResponse(serviceRecord);
     }
 
-    public ServiceRecord updateStatus(
+    public ServiceRecordResponse updateStatus(
             Long id,
             ServiceStatusUpdateRequest request) {
 
@@ -212,8 +130,9 @@ public class ServiceRecordService {
 
         serviceRecord.setStatus(newStatus);
 
-        return serviceRecordRepository.save(serviceRecord);
+        ServiceRecord updatedServiceRecord =
+                serviceRecordRepository.save(serviceRecord);
+
+        return serviceRecordMapper.toResponse(updatedServiceRecord);
     }
 }
-
-

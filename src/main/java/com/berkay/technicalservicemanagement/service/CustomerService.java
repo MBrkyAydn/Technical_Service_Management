@@ -1,11 +1,11 @@
 package com.berkay.technicalservicemanagement.service;
 
 import com.berkay.technicalservicemanagement.dto.CustomerCreateRequest;
+import com.berkay.technicalservicemanagement.dto.CustomerResponse;
 import com.berkay.technicalservicemanagement.entity.Customer;
 import com.berkay.technicalservicemanagement.exception.CustomerNotFoundException;
+import com.berkay.technicalservicemanagement.mapper.CustomerMapper;
 import com.berkay.technicalservicemanagement.repository.CustomerRepository;
-import jakarta.validation.Valid;
-import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,36 +14,43 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
+
     private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
 
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+    public List<CustomerResponse> getAllCustomers() {
 
+        return customerRepository.findAll()
+                .stream()
+                .map(customerMapper::toResponse)
+                .toList();
     }
 
+    public CustomerResponse createCustomer(CustomerCreateRequest request) {
 
-    public Customer createCustomer(CustomerCreateRequest request) {
-        Customer customer = new Customer(
-                request.getFirstName(),
-                request.getLastName(),
-                request.getEmail(),
-                request.getAddress(),
-                request.getPhone()
-        );
-        return customerRepository.save(customer);
+        Customer customer = customerMapper.toEntity(request);
 
+        Customer savedCustomer = customerRepository.save(customer);
+
+        return customerMapper.toResponse(savedCustomer);
     }
 
-    public Customer findCustomerById(Long id) {
-        return customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException("Müşteri Bulunamadı"));
-
-
-    }
-
-    public Customer updateCustomer(Long id, CustomerCreateRequest request) {
+    public CustomerResponse findCustomerById(Long id) {
 
         Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException("Müşteri bulunamadı"));
+                .orElseThrow(() ->
+                        new CustomerNotFoundException("Müşteri Bulunamadı"));
+
+        return customerMapper.toResponse(customer);
+    }
+
+    public CustomerResponse updateCustomer(
+            Long id,
+            CustomerCreateRequest request) {
+
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() ->
+                        new CustomerNotFoundException("Müşteri bulunamadı"));
 
         customer.setFirstName(request.getFirstName());
         customer.setLastName(request.getLastName());
@@ -51,15 +58,17 @@ public class CustomerService {
         customer.setEmail(request.getEmail());
         customer.setAddress(request.getAddress());
 
-        return customerRepository.save(customer);
+        Customer updatedCustomer = customerRepository.save(customer);
+
+        return customerMapper.toResponse(updatedCustomer);
     }
-public void deleteCustomer(Long id) {
+
+    public void deleteCustomer(Long id) {
+
         Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException("Müşteri Bulunamadı"));
+                .orElseThrow(() ->
+                        new CustomerNotFoundException("Müşteri Bulunamadı"));
 
-    customerRepository.delete(customer);
-
-
-}
-
+        customerRepository.delete(customer);
+    }
 }

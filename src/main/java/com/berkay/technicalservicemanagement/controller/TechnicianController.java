@@ -1,7 +1,7 @@
 package com.berkay.technicalservicemanagement.controller;
 
 import com.berkay.technicalservicemanagement.dto.TechnicianCreateRequest;
-import com.berkay.technicalservicemanagement.entity.Technician;
+import com.berkay.technicalservicemanagement.dto.TechnicianResponse;
 import com.berkay.technicalservicemanagement.service.TechnicianService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,24 +17,24 @@ public class TechnicianController {
     private final TechnicianService technicianService;
 
     @PostMapping
-    public Technician createTechnician(
+    public TechnicianResponse createTechnician(
             @Valid @RequestBody TechnicianCreateRequest request) {
 
         return technicianService.createTechnician(request);
     }
 
     @GetMapping
-    public List<Technician> getAllTechnicians() {
+    public List<TechnicianResponse> getAllTechnicians() {
         return technicianService.getAllTechnicians();
     }
 
     @GetMapping("/{id}")
-    public Technician getTechnician(@PathVariable Long id) {
+    public TechnicianResponse getTechnician(@PathVariable Long id) {
         return technicianService.getTechnician(id);
     }
 
     @PutMapping("/{id}")
-    public Technician updateTechnician(
+    public TechnicianResponse updateTechnician(
             @PathVariable Long id,
             @Valid @RequestBody TechnicianCreateRequest request) {
 

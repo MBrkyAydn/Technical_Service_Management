@@ -3,7 +3,6 @@ package com.berkay.technicalservicemanagement.controller;
 import com.berkay.technicalservicemanagement.dto.ServiceRecordCreateRequest;
 import com.berkay.technicalservicemanagement.dto.ServiceRecordResponse;
 import com.berkay.technicalservicemanagement.dto.ServiceStatusUpdateRequest;
-import com.berkay.technicalservicemanagement.entity.ServiceRecord;
 import com.berkay.technicalservicemanagement.service.ServiceRecordService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ public class ServiceRecordController {
     private final ServiceRecordService serviceRecordService;
 
     @PostMapping
-    public ServiceRecord createServiceRecord(
+    public ServiceRecordResponse createServiceRecord(
             @Valid @RequestBody ServiceRecordCreateRequest request) {
 
         return serviceRecordService.createServiceRecord(request);
@@ -35,13 +34,11 @@ public class ServiceRecordController {
         return serviceRecordService.getServiceRecord(id);
     }
 
-    @PatchMapping("/{id}/status") //  Bir kaynağın tüm alanlarını değil, sadece belirli bir veya birkaç alanını kısmi
-    // olarak güncellemek (partial update) amacıyla kullanılır.
-    public ServiceRecord updateStatus(
+    @PatchMapping("/{id}/status")
+    public ServiceRecordResponse updateStatus(
             @PathVariable Long id,
             @Valid @RequestBody ServiceStatusUpdateRequest request) {
 
         return serviceRecordService.updateStatus(id, request);
     }
-
 }
