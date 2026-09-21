@@ -89,10 +89,13 @@ if (-not (Test-Path -Path $MAVEN_M2_PATH)) {
 }
 
 $MAVEN_WRAPPER_DISTS = $null
-if ((Get-Item $MAVEN_M2_PATH).Target[0] -eq $null) {
+$MAVEN_M2_ITEM = Get-Item -LiteralPath $MAVEN_M2_PATH
+# Target is $null for a normal directory. Indexing Target before checking it
+# causes the wrapper to stop with "Cannot index into a null array".
+if ($null -eq $MAVEN_M2_ITEM.Target) {
   $MAVEN_WRAPPER_DISTS = "$MAVEN_M2_PATH/wrapper/dists"
 } else {
-  $MAVEN_WRAPPER_DISTS = (Get-Item $MAVEN_M2_PATH).Target[0] + "/wrapper/dists"
+  $MAVEN_WRAPPER_DISTS = $MAVEN_M2_ITEM.Target[0] + "/wrapper/dists"
 }
 
 $MAVEN_HOME_PARENT = "$MAVEN_WRAPPER_DISTS/$distributionUrlNameMain"

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name="Technicians")
+@Table(name="technicians")
 public class Technician extends BaseEntity {
 //
 //    @Id
