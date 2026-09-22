@@ -1,4 +1,12 @@
 HELP.md
+CLAUDE.md
+AGENTS.md
+graphify-out/
+.copilot/
+.codex/
+.claude/
+.agents/
+
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

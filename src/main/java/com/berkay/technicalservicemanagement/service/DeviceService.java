@@ -11,6 +11,7 @@ import com.berkay.technicalservicemanagement.repository.CustomerRepository;
 import com.berkay.technicalservicemanagement.repository.DeviceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -73,11 +74,16 @@ public class DeviceService {
         return deviceMapper.toResponse(updatedDevice);
     }
 
+    @Transactional
     public void deleteDevice(Long id) {
 
         Device device = deviceRepository.findById(id)
                 .orElseThrow(() ->
                         new DeviceNotFoundException("Device : " + id));
+
+        if (device.getServiceRecords() != null && !device.getServiceRecords().isEmpty()) {
+            throw new IllegalStateException("Bu cihaza ait servis kaydı bulunduğu için cihaz silinemez");
+        }
 
         deviceRepository.delete(device);
     }

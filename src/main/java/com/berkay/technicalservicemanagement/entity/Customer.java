@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -24,6 +27,8 @@ public class Customer extends BaseEntity {
     private String address;
     private String phone;
 
+@OneToMany(mappedBy = "customer")
+private List<Device> devicess = new ArrayList<>();
 
     public Customer(String firstName, String lastName, String email, String address, String phone) {
         this.firstName = firstName;

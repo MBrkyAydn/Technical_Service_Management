@@ -46,6 +46,8 @@ public class ServiceRecordService {
         ServiceRecord serviceRecord =
                 serviceRecordMapper.toEntity(request, device, technician);
 
+        device.addServiceRecord(serviceRecord);
+
         serviceRecord.setServiceDate(LocalDateTime.now());
         serviceRecord.setStatus(ServiceStatus.BEKLEMEDE);
 

@@ -49,4 +49,10 @@ public class GlobalExceptionHandler {
     public String handleInvalidServiceStatusTransitionException(InvalidServiceStatusTransitionException ex) {
           return   ex.getMessage();
     }
+
+    @ExceptionHandler(IllegalStateException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleIllegalStateException(IllegalStateException ex) {
+        return ex.getMessage();
+    }
 }

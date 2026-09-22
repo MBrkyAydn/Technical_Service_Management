@@ -7,11 +7,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name="devices")
+@Table(name = "devices")
 public class Device extends BaseEntity {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +26,16 @@ public class Device extends BaseEntity {
     private String serialNumber;
 
     @ManyToOne // → Bir Customer'ın birden fazla Device'ı olabilir diyor.
-    @JoinColumn(name = "customer_id") //Bu bağlantıyı Device tablosunda customer_id isimli sütunda tut diyor.
+    @JoinColumn(name = "customer_id", nullable = true) //Bu bağlantıyı Device tablosunda customer_id isimli sütunda tut diyor.
     private Customer customer; // Device ile Customer arasında bağlantı kurulacağını söylüyor.
+
+    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ServiceRecord> serviceRecords = new ArrayList<>();
+
+    public void addServiceRecord(ServiceRecord serviceRecord) {
+        serviceRecords.add(serviceRecord);
+        serviceRecord.setDevice(this);
+    }
 
 
     public Device(String type, String brand, String model,
@@ -36,4 +47,6 @@ public class Device extends BaseEntity {
         this.serialNumber = serialNumber;
         this.customer = customer;
     }
+
+
 }

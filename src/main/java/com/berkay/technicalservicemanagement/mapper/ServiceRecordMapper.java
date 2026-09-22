@@ -32,11 +32,15 @@ public class ServiceRecordMapper {
 
         response.setId(serviceRecord.getId());
 
-        response.setCustomerName(
-                serviceRecord.getDevice().getCustomer().getFirstName()
-                        + " "
-                        + serviceRecord.getDevice().getCustomer().getLastName()
-        );
+        if (serviceRecord.getDevice().getCustomer() == null) {
+            response.setCustomerName("Müşteri silinmiş");
+        } else {
+            response.setCustomerName(
+                    serviceRecord.getDevice().getCustomer().getFirstName()
+                            + " "
+                            + serviceRecord.getDevice().getCustomer().getLastName()
+            );
+        }
 
         response.setDevice(
                 serviceRecord.getDevice().getBrand()
